@@ -29,8 +29,8 @@ mkdir {boot,dev,proc,sys,tmp}
 
 6. download source code
 
-https://www.kernel.org/ --> /mnt/sda7/tmp (busybox-1.32.0)
-https://busybox.net/source.html --> /mnt/sda7/tmp (linux-4.19.138)
+https://busybox.net/source.html --> /mnt/sda7/tmp (busybox-1.32.0)
+https://www.kernel.org/ --> /mnt/sda7/tmp (linux-4.19.138)
 
 7. extract source code
 
