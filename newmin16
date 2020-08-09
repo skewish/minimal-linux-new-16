@@ -110,5 +110,5 @@ umount /dev/sda5
 grub-install /dev/sda
 update-grub
 
-16. reboot
+16. reboot (at menu, select minimal linux new 16)
 
