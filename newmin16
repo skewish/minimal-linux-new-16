@@ -1,0 +1,114 @@
+minimal linux new 16
+
+1. pre-setup
+
+64 bit debian 10
+30 gb build partition (/dev/sda5)
+swap (/dev/sda2)
+bootloader on mbr (grub)
+
+2. become su
+
+3. install compile software (if not present)
+
+apt install build-essential
+apt install bc bison flex gawk python rsync
+apt install libelf-dev libncurses-dev libssl-dev
+
+4. make filesystem
+
+cd /
+mkdir /mnt/sda5
+mkfs.ext4 /dev/sda5
+mount -t ext4 /dev/sda5 /mnt/sda5
+
+5. add directories
+
+cd /mnt/sda5
+mkdir {boot,dev,proc,sys,tmp}
+
+6. download source code
+
+https://busybox.net/source.html --> /mnt/sda5/tmp (busybox-1.32.0)
+https://www.kernel.org/ --> /mnt/sda5/tmp (linux-4.19.138)
+
+7. extract source code
+
+cd /mnt/sda5/tmp
+tar -x -f linux*.tar.xz
+tar -x -f busybox*.tar.bz2
+chown -R 0.0 /mnt/sda5
+
+8. install kernel
+
+cd /mnt/sda5/tmp/linux*
+make clean
+make distclean
+make defconfig
+make menuconfig (shut off modules and more)
+make
+make install INSTALL_PATH=/mnt/sda5/boot
+make headers_install INSTALL_HDR_PATH=/mnt/sda5/usr
+cd /mnt/sda5
+ln -f -s boot/vmlinuz* vmlinuz
+
+9. make initramfs
+
+cd /mnt/sda5/boot
+mkinitramfs -k -o initramfs-4.19.138 4.19.138
+
+10. extract userspace
+
+cd /mnt/sda5
+gunzip -c boot/initramfs* > tmp/initramfs.tmp
+cpio -i -d < tmp/initramfs.tmp
+
+11. update busybox
+
+cd /mnt/sda5/tmp/busybox*
+make menuconfig (change install destination to /mnt/sda5)
+make
+make install
+
+12. add etc/fstab
+
+cat > /mnt/sda5/etc/fstab << 'done'
+proc /proc proc defaults 0 0
+udev /dev devtmpfs defaults 0 0
+tmpfs /run tmpfs defaults 0 0
+sysfs /sys sysfs defaults 0 0
+/dev/sda5 / ext4 defaults 0 1
+/dev/sda2 none swap sw 0 0
+done
+
+13. add etc/os-release
+
+cat > /mnt/sda5/etc/os-release << 'done'
+PRETTY_NAME="minimal linux new 16"
+NAME="newmin16"
+VERSION_ID="16"
+ID="newmin"
+HOME_URL="github.com"
+done
+
+14. add etc/init.d/rcS
+
+mkdir /mnt/sda5/etc/init.d
+cat > /mnt/sda5/etc/init.d/rcS << 'done'
+#!/bin/sh
+mount -w -o remount /dev/sda5 /
+rm /.ash_history
+mount -a
+swapon -a
+done
+chmod 0755 /mnt/sda5/etc/init.d/rcS
+
+15. update grub
+
+cd /
+umount /dev/sda5
+grub-install /dev/sda
+update-grub
+
+16. reboot
+
