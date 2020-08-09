@@ -3,8 +3,8 @@ minimal linux new 16
 1. pre-setup
 
 64 bit debian 10
-30 gb build partition (/dev/sda5)
-swap (/dev/sda2)
+30 gb build partition (ex. /dev/sda5)
+swap (ex. /dev/sda2)
 bootloader on mbr (grub)
 
 2. become su
@@ -29,8 +29,8 @@ mkdir {boot,dev,proc,sys,tmp}
 
 6. download source code
 
-https://busybox.net/source.html --> /mnt/sda5/tmp (busybox-1.32.0)
-https://www.kernel.org/ --> /mnt/sda5/tmp (linux-4.19.138)
+https://busybox.net/source.html --> /mnt/sda5/tmp (ex. busybox-1.32.0)
+https://www.kernel.org/ --> /mnt/sda5/tmp (ex. linux-4.19.138)
 
 7. extract source code
 
