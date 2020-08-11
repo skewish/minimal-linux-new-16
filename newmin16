@@ -2,8 +2,8 @@ minimal linux new 16
 
 1. pre-setup
 
-64 bit debian 10 (on /dev/sda1)
-swap (ex. /dev/sda2)
+64 bit debian 10 (ex. /dev/sda1)
+swap partition (ex. /dev/sda2)
 30 gb build partition (ex. /dev/sda5)
 bootloader on mbr (grub)
 
@@ -88,7 +88,7 @@ PRETTY_NAME="minimal linux new 16"
 NAME="newmin16"
 VERSION_ID="16"
 ID="newmin"
-HOME_URL="github.com"
+HOME_URL="https://github.com"
 done
 
 14. add etc/init.d/rcS
