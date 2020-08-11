@@ -2,9 +2,9 @@ minimal linux new 16
 
 1. pre-setup
 
-64 bit debian 10
-30 gb build partition (ex. /dev/sda5)
+64 bit debian 10 (on /dev/sda1)
 swap (ex. /dev/sda2)
+30 gb build partition (ex. /dev/sda5)
 bootloader on mbr (grub)
 
 2. become su
@@ -25,7 +25,7 @@ mount -t ext4 /dev/sda5 /mnt/sda5
 5. add directories
 
 cd /mnt/sda5
-mkdir {boot,dev,proc,sys,tmp}
+mkdir {boot,dev,proc,sys,tmp,usr}
 
 6. download source code
 
@@ -73,10 +73,10 @@ make install
 12. add etc/fstab
 
 cat > /mnt/sda5/etc/fstab << 'done'
-proc /proc proc defaults 0 0
 udev /dev devtmpfs defaults 0 0
-tmpfs /run tmpfs defaults 0 0
+proc /proc proc defaults 0 0
 sysfs /sys sysfs defaults 0 0
+tmpfs /run tmpfs defaults 0 0
 /dev/sda5 / ext4 defaults 0 1
 /dev/sda2 none swap sw 0 0
 done
