@@ -100,7 +100,6 @@ rm /.ash_history
 mount -a
 swapon -a
 done
-chmod 0755 /mnt/sda6/etc/init.d/rcS
 
 15. update grub
 
