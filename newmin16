@@ -86,7 +86,7 @@ done
 cat > /mnt/sda6/etc/os-release << 'done'
 PRETTY_NAME="minimal linux new 16"
 NAME="newmin16"
-VERSION="v2"
+VERSION="v4"
 HOME_URL="https://github.com"
 done
 
