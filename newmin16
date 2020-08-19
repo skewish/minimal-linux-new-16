@@ -100,6 +100,7 @@ rm /.ash_history
 mount -a
 swapon -a
 done
+chmod 0755 /mnt/sda6/etc/init.d/rcS
 
 15. update grub
 
@@ -109,4 +110,3 @@ grub-install /dev/sda
 update-grub
 
 16. reboot (at menu, select minimal linux new 16)
-
