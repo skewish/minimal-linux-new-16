@@ -1,13 +1,13 @@
-minimal linux new 16
+minimal-linux-new-16
 
 1. pre-setup
 
-64 bit debian 10 (ex. /dev/sda1)
-swap partition (ex. /dev/sda2)
-10 gb build partition (ex. /dev/sda6)
+64 bit debian 10
+10+ gb build partition (/dev/sda7)
+swap (/dev/sda2)
 bootloader on mbr (grub)
 
-2. become su	
+2. become su
 
 3. install compile software (if not present)
 
@@ -18,95 +18,102 @@ apt install libelf-dev libncurses-dev libssl-dev
 4. make filesystem
 
 cd /
-mkdir /mnt/sda6
-mkfs.ext4 /dev/sda6
-mount -t ext4 /dev/sda6 /mnt/sda6
+mkdir /mnt/sda7
+mkfs.ext4 -c /dev/sda7
+mount -t ext4 /dev/sda7 /mnt/sda7
 
 5. add directories
 
-cd /mnt/sda6
+cd /mnt/sda7
 mkdir {boot,dev,proc,sys,tmp,usr}
 
-6. download source code
+6. download & unpack linux kernel & busybox source code
 
-https://www.kernel.org/ --> /mnt/sda6/tmp (ex. linux-4.19.138)
-https://busybox.net/source.html --> /mnt/sda6/tmp (ex. busybox-1.32.0)
+https://www.kernel.org/latest-stable-version --> /mnt/sda7/tmp
+https://busybox.net/latest-stable-version --> /mnt/sda7/tmp
 
-7. extract source code
-
-cd /mnt/sda6/tmp
+cd /mnt/sda7/tmp
 tar -x -f linux*.tar.xz
 tar -x -f busybox*.tar.bz2
-chown -R 0.0 /mnt/sda6
+chown -R 0.0 /mnt/sda7
 
-8. install kernel
+7. install kernel
 
-cd /mnt/sda6/tmp/linux*
+cd /mnt/sda7/tmp/linux*
 make clean
 make distclean
 make defconfig
-make menuconfig (shut off modules and more)
-make
-make install INSTALL_PATH=/mnt/sda6/boot
-make headers_install INSTALL_HDR_PATH=/mnt/sda6/usr
-cd /mnt/sda6
+make menuconfig (shut off modules & more)
+make -j4
+make install INSTALL_PATH=/mnt/sda7/boot
+make headers_install INSTALL_HDR_PATH=/mnt/sda7/usr
+cd /mnt/sda7
 ln -f -s boot/vmlinuz* vmlinuz
 
-9. make initramfs
+8. make initramfs (ex. for linux-5.8.2)
 
-cd /mnt/sda6/boot
-mkinitramfs -k -o initramfs-4.19.138 4.19.138
+cd /mnt/sda7/boot
+mkinitramfs -k -o initramfs-5.8.2 5.8.2
 
-10. extract userspace
+9. extract userspace
 
-cd /mnt/sda6
+cd /mnt/sda7
 gunzip -c boot/initramfs* > tmp/initramfs.tmp
 cpio -i -d < tmp/initramfs.tmp
+ln -f -s boot/initramfs* initramfs
+
+10. remove extraneous stuff
+
+rm -f -r /mnt/sda7/conf
+rm -f -r /mnt/sda7/scripts
+rm /mnt/sda7/init
 
 11. update busybox
 
-cd /mnt/sda6/tmp/busybox*
-make menuconfig (change install destination to /mnt/sda6)
+cd /mnt/sda7/tmp/busybox*
+make menuconfig (change install destination to /mnt/sda7)
 make
 make install
 
 12. add etc/fstab
 
-cat > /mnt/sda6/etc/fstab << 'done'
-udev /dev devtmpfs defaults 0 0
+cat > /mnt/sda7/etc/fstab << 'done'
 proc /proc proc defaults 0 0
-sysfs /sys sysfs defaults 0 0
+udev /dev devtmpfs defaults 0 0
 tmpfs /run tmpfs defaults 0 0
-/dev/sda6 / ext4 defaults 0 1
+sysfs /sys sysfs defaults 0 0
+/dev/sda7 / ext4 defaults 0 1
 /dev/sda2 none swap sw 0 0
 done
 
 13. add etc/os-release
 
-cat > /mnt/sda6/etc/os-release << 'done'
-PRETTY_NAME="minimal linux new 16"
+cat > /mnt/sda7/etc/os-release << 'done'
+PRETTY_NAME="minimal-linux-new-16"
 NAME="newmin16"
-VERSION="v4"
+VERSION="v5"
 HOME_URL="https://github.com"
 done
 
 14. add etc/init.d/rcS
 
-mkdir /mnt/sda6/etc/init.d
-cat > /mnt/sda6/etc/init.d/rcS << 'done'
+mkdir /mnt/sda7/etc/init.d
+cat > /mnt/sda7/etc/init.d/rcS << 'done'
 #!/bin/sh
-mount -w -o remount /dev/sda6 /
+mount -w -o remount /dev/sda7 /
 rm /.ash_history
+rm -f -r /tmp;mkdir -m 1777 /tmp
 mount -a
 swapon -a
 done
-chmod 0755 /mnt/sda6/etc/init.d/rcS
+chmod 0755 /mnt/sda7/etc/init.d/rcS
 
 15. update grub
 
 cd /
-umount /dev/sda6
+umount /dev/sda7
 grub-install /dev/sda
 update-grub
 
-16. reboot (at menu, select minimal linux new 16)
+16. reboot (at menu select minimal-linux-new-16)
+
