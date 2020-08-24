@@ -29,8 +29,8 @@ mkdir {boot,dev,proc,sys,tmp,usr}
 
 6. download & unpack linux kernel & busybox source code
 
-https://www.kernel.org/latest-stable-version --> /mnt/sda7/tmp
-https://busybox.net/latest-stable-version --> /mnt/sda7/tmp
+https://kernel.org/(latest-stable-version) --> /mnt/sda7/tmp
+https://busybox.net/(latest-stable-version) --> /mnt/sda7/tmp
 
 cd /mnt/sda7/tmp
 tar -x -f linux*.tar.xz
@@ -116,4 +116,3 @@ grub-install /dev/sda
 update-grub
 
 16. reboot (at menu select minimal-linux-new-16)
-
