@@ -3,8 +3,8 @@ minimal-linux-new-16
 1. pre-setup
 
 64 bit debian 10
-10+ gb build partition (/dev/sda7)
-swap (/dev/sda2)
+10+ gb build partition (ex. /dev/sda7)
+swap (ex. /dev/sda2)
 bootloader on mbr (grub)
 
 2. become su
@@ -31,7 +31,6 @@ mkdir {boot,dev,proc,sys,tmp,usr}
 
 https://kernel.org/(latest-stable-version) --> /mnt/sda7/tmp
 https://busybox.net/(latest-stable-version) --> /mnt/sda7/tmp
-
 cd /mnt/sda7/tmp
 tar -x -f linux*.tar.xz
 tar -x -f busybox*.tar.bz2
@@ -50,10 +49,10 @@ make headers_install INSTALL_HDR_PATH=/mnt/sda7/usr
 cd /mnt/sda7
 ln -f -s boot/vmlinuz* vmlinuz
 
-8. make initramfs (ex. for linux-5.8.2)
+8. make initramfs (ex. linux-5.8.1)
 
 cd /mnt/sda7/boot
-mkinitramfs -k -o initramfs-5.8.2 5.8.2
+mkinitramfs -k -o initramfs-5.8.1 5.8.1
 
 9. extract userspace
 
@@ -101,8 +100,8 @@ mkdir /mnt/sda7/etc/init.d
 cat > /mnt/sda7/etc/init.d/rcS << 'done'
 #!/bin/sh
 mount -w -o remount /dev/sda7 /
-rm /.ash_history
 rm -f -r /tmp;mkdir -m 1777 /tmp
+rm /.ash_history
 mount -a
 swapon -a
 done
@@ -116,3 +115,4 @@ grub-install /dev/sda
 update-grub
 
 16. reboot (at menu select minimal-linux-new-16)
+
