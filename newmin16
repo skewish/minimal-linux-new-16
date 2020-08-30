@@ -19,7 +19,7 @@ apt install libelf-dev libncurses-dev libssl-dev
 
 cd /
 mkdir /mnt/sda7
-mkfs.ext4 -c /dev/sda7
+mkfs.ext4 /dev/sda7
 mount -t ext4 /dev/sda7 /mnt/sda7
 
 5. add directories
@@ -49,17 +49,16 @@ make headers_install INSTALL_HDR_PATH=/mnt/sda7/usr
 cd /mnt/sda7
 ln -f -s boot/vmlinuz* vmlinuz
 
-8. make initramfs (ex. linux-5.8.1)
+8. make initramfs (ex. linux-5.8.7)
 
 cd /mnt/sda7/boot
-mkinitramfs -k -o initramfs-5.8.1 5.8.1
+mkinitramfs -k -o initramfs-5.8.7 5.8.7
 
 9. extract userspace
 
 cd /mnt/sda7
 gunzip -c boot/initramfs* > tmp/initramfs.tmp
 cpio -i -d < tmp/initramfs.tmp
-ln -f -s boot/initramfs* initramfs
 
 10. remove extraneous stuff
 
@@ -90,7 +89,7 @@ done
 cat > /mnt/sda7/etc/os-release << 'done'
 PRETTY_NAME="minimal-linux-new-16"
 NAME="newmin16"
-VERSION="v5"
+VERSION="v7"
 HOME_URL="https://github.com"
 done
 
