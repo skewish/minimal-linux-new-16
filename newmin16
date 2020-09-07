@@ -69,6 +69,8 @@ rm /mnt/sda7/init
 11. update busybox
 
 cd /mnt/sda7/tmp/busybox*
+make clean
+make distclean
 make menuconfig (change install destination to /mnt/sda7)
 make
 make install
@@ -114,4 +116,3 @@ grub-install /dev/sda
 update-grub
 
 16. reboot (at menu select minimal-linux-new-16)
-
