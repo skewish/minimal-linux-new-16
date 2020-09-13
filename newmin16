@@ -78,8 +78,8 @@ make install
 12. add etc/fstab
 
 cat > /mnt/sda7/etc/fstab << 'done'
-proc /proc proc defaults 0 0
 udev /dev devtmpfs defaults 0 0
+proc /proc proc defaults 0 0
 tmpfs /run tmpfs defaults 0 0
 sysfs /sys sysfs defaults 0 0
 /dev/sda7 / ext4 defaults 0 1
