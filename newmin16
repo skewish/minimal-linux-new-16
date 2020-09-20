@@ -42,7 +42,7 @@ cd /mnt/sda7/tmp/linux*
 make clean
 make distclean
 make defconfig
-make menuconfig (shut off modules & more)
+make menuconfig (shut off loadable module support)
 make -j4
 make install INSTALL_PATH=/mnt/sda7/boot
 make headers_install INSTALL_HDR_PATH=/mnt/sda7/usr
