@@ -108,12 +108,12 @@ swapon -a
 done
 chmod 0755 /mnt/sda7/etc/init.d/rcS
 
-15. update grub2 (rec. password protect)
+15. update grub2 (rec. password protect grub menu)
 
 cd /
 umount /dev/sda7
 grub-install /dev/sda
 update-grub
 
-16. reboot (at menu select minimal-linux-new-16)
+16. reboot (at grub menu select minimal-linux-new-16)
 
