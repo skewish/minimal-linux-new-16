@@ -5,7 +5,7 @@ minimal-linux-new-16
 64 bit debian 10
 10+ gb build partition (ex. /dev/sda7)
 swap (ex. /dev/sda2)
-bootloader on mbr (grub)
+bootloader on mbr (grub2)
 
 2. become su
 
@@ -42,7 +42,7 @@ cd /mnt/sda7/tmp/linux*
 make clean
 make distclean
 make defconfig
-make menuconfig (shut off loadable module support)
+make menuconfig (shut off loadable module support & more)
 make -j4
 make install INSTALL_PATH=/mnt/sda7/boot
 make headers_install INSTALL_HDR_PATH=/mnt/sda7/usr
@@ -108,7 +108,7 @@ swapon -a
 done
 chmod 0755 /mnt/sda7/etc/init.d/rcS
 
-15. update grub
+15. update grub2 (rec. password protect)
 
 cd /
 umount /dev/sda7
