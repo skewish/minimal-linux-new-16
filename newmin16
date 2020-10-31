@@ -1,12 +1,12 @@
 minimal-linux-new-16
 
-1. pre-setup
+1. parent system pre-setup
 
 64-bit debian (latest-stable-version)
 10 GB build partition (ex. /dev/sda7)
-swap (ex. /dev/sda2)
+swap partition (ex. /dev/sda2)
 bootloader on mbr (grub2)
-network connection
+internet connection
 
 2. open a terminal & become su
 
@@ -16,7 +16,7 @@ apt install build-essential
 apt install bc bison flex gawk python rsync
 apt install libelf-dev libncurses-dev libssl-dev
 
-4. make & mount filesystem
+4. create & mount filesystem
 
 cd /
 mkdir /mnt/sda7
@@ -39,7 +39,7 @@ chown -R 0.0 /mnt/sda7
 
 7. install kernel
 
-cd /mnt/sda7/tmp/linux*
+cd /mnt/sda7/tmp/linux*/
 make clean
 make distclean
 make defconfig
@@ -50,12 +50,12 @@ make headers_install INSTALL_HDR_PATH=/mnt/sda7/usr
 cd /mnt/sda7
 ln -f -s boot/vmlinuz* vmlinuz
 
-8. make initramfs (ex. linux-5.8.7)
+8. create initramfs image from new kernel (ex. linux-5.9.1)
 
 cd /mnt/sda7/boot
-mkinitramfs -k -o initramfs-5.8.7 5.8.7
+mkinitramfs -k -o initramfs-5.9.1 5.9.1
 
-9. extract userspace
+9. extract userspace from new initramfs image
 
 cd /mnt/sda7
 gunzip -c boot/initramfs* > tmp/initramfs.tmp
@@ -63,13 +63,14 @@ cpio -i -d < tmp/initramfs.tmp
 
 10. remove extraneous stuff
 
+rm /mnt/sda7/init
 rm -f -r /mnt/sda7/conf
 rm -f -r /mnt/sda7/scripts
-rm /mnt/sda7/init
+rm -f -r /var/tmp/mkinitramfs*
 
 11. update busybox
 
-cd /mnt/sda7/tmp/busybox*
+cd /mnt/sda7/tmp/busybox*/
 make clean
 make distclean
 make menuconfig (change install destination to /mnt/sda7)
@@ -92,7 +93,7 @@ done
 cat > /mnt/sda7/etc/os-release << 'done'
 PRETTY_NAME="minimal-linux-new-16"
 NAME="newmin16"
-VERSION="v9"
+VERSION="v10"
 HOME_URL="https://github.com"
 done
 
