@@ -37,7 +37,7 @@ tar -x -f linux*.tar.xz
 tar -x -f busybox*.tar.bz2
 chown -R 0.0 /mnt/sda7
 
-7. install kernel
+7. install kernel (ex. linux-5.9.6)
 
 cd /mnt/sda7/tmp/linux*/
 make clean
@@ -50,12 +50,12 @@ make headers_install INSTALL_HDR_PATH=/mnt/sda7/usr
 cd /mnt/sda7
 ln -f -s boot/vmlinuz* vmlinuz
 
-8. create initramfs image from new kernel (ex. linux-5.9.1)
+8. create initramfs image from new kernel (ex. vmlinuz-5.9.6)
 
 cd /mnt/sda7/boot
-mkinitramfs -k -o initramfs-5.9.1 5.9.1
+mkinitramfs -k -o initramfs-5.9.6 5.9.6
 
-9. extract userspace from new initramfs image
+9. extract userspace from initramfs image
 
 cd /mnt/sda7
 gunzip -c boot/initramfs* > tmp/initramfs.tmp
@@ -66,7 +66,6 @@ cpio -i -d < tmp/initramfs.tmp
 rm /mnt/sda7/init
 rm -f -r /mnt/sda7/conf
 rm -f -r /mnt/sda7/scripts
-rm -f -r /var/tmp/mkinitramfs*
 
 11. update busybox
 
@@ -93,7 +92,7 @@ done
 cat > /mnt/sda7/etc/os-release << 'done'
 PRETTY_NAME="minimal-linux-new-16"
 NAME="newmin16"
-VERSION="v10"
+VERSION="v11"
 HOME_URL="https://github.com"
 done
 
