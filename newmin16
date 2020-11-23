@@ -55,7 +55,7 @@ ln -f -s boot/vmlinuz* vmlinuz
 cd /mnt/sda7/boot
 mkinitramfs -k -o initramfs-5.9.6 5.9.6
 
-9. extract userspace from initramfs image
+9. extract userspace from new initramfs image
 
 cd /mnt/sda7
 gunzip -c boot/initramfs* > tmp/initramfs.tmp
@@ -76,7 +76,7 @@ make menuconfig (change install destination to /mnt/sda7)
 make
 make install
 
-12. add etc/fstab
+12. add /mnt/sda7/etc/fstab
 
 cat > /mnt/sda7/etc/fstab << 'done'
 udev /dev devtmpfs defaults 0 0
@@ -87,16 +87,16 @@ sysfs /sys sysfs defaults 0 0
 /dev/sda2 none swap sw 0 0
 done
 
-13. replace etc/os-release
+13. replace /mnt/sda7/etc/os-release
 
 cat > /mnt/sda7/etc/os-release << 'done'
 PRETTY_NAME="minimal-linux-new-16"
 NAME="newmin16"
-VERSION="v12"
+VERSION="v13"
 HOME_URL="https://github.com"
 done
 
-14. add etc/init.d/rcS
+14. add /mnt/sda7/etc/init.d/rcS
 
 mkdir /mnt/sda7/etc/init.d
 cat > /mnt/sda7/etc/init.d/rcS << 'done'
