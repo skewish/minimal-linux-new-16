@@ -4,13 +4,13 @@ minimal-linux-new-16
 
 64-bit debian (latest-stable-version)
 10 GB build partition (ex. /dev/sda7)
-swap partition (ex. /dev/sda2)
+typical swap partition (ex. /dev/sda2)
 bootloader on mbr (grub2)
 internet connection
 
 2. open a terminal & become su
 
-3. install compile software (if not present)
+3. install compiler software (if not present)
 
 apt install build-essential
 apt install bc bison flex gawk python rsync
@@ -48,18 +48,18 @@ make -j4
 make install INSTALL_PATH=/mnt/sda7/boot
 make headers_install INSTALL_HDR_PATH=/mnt/sda7/usr
 cd /mnt/sda7
-ln -f -s boot/vmlinuz* vmlinuz
+ln -f -s ./boot/vmlinuz* vmlinuz
 
 8. create initramfs image from new kernel (ex. vmlinuz-5.9.6)
 
 cd /mnt/sda7/boot
 mkinitramfs -k -o initramfs-5.9.6 5.9.6
 
-9. extract userspace from new initramfs image
+9. extract userspace from initramfs image (ex. initramfs-5.9.6)
 
 cd /mnt/sda7
-gunzip -c boot/initramfs* > tmp/initramfs.tmp
-cpio -i -d < tmp/initramfs.tmp
+gunzip -c ./boot/initramfs* > ./tmp/initramfs.tmp
+cpio -i -d < ./tmp/initramfs.tmp
 
 10. remove extraneous stuff
 
@@ -92,7 +92,7 @@ done
 cat > /mnt/sda7/etc/os-release << 'done'
 PRETTY_NAME="minimal-linux-new-16"
 NAME="newmin16"
-VERSION="v13"
+VERSION="v14"
 HOME_URL="https://github.com"
 done
 
