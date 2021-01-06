@@ -1,6 +1,6 @@
 minimal-linux-new-16
 
-1. my parent system pre-setup
+1. parent system pre-setup
 
 64-bit debian (latest-stable-version)
 10 GB build partition (ex. using /dev/sda7)
