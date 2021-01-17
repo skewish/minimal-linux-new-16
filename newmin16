@@ -1,6 +1,6 @@
 minimal-linux-new-16
 
-1. parent system pre-setup
+1. parent system pre-setup (fyi only)
 
 64-bit debian (latest-stable-version)
 10 GB build partition (ex. using /dev/sda7)
@@ -91,7 +91,7 @@ done
 cat > /mnt/sda7/etc/os-release << 'done'
 PRETTY_NAME="minimal-linux-new-16"
 NAME="newmin16"
-VERSION="v16"
+VERSION="v17"
 HOME_URL="https://github.com"
 done
 
