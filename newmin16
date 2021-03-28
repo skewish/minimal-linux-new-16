@@ -3,7 +3,7 @@ minimal-linux-new-16
 1. parent system pre-setup (fyi)
 
 64-bit debian (latest-stable-version)
-10 GB build partition (ex. /dev/sda7, change to what you're using)
+10 GB build partition (ex. /dev/sda7)
 typical swap partition (ex. /dev/sda2)
 internet connection
 
@@ -30,13 +30,12 @@ mkdir {boot,dev,proc,sys,tmp,usr}
 
 https://kernel.org/(latest-stable-version) --> /mnt/sda7/tmp
 https://busybox.net/(latest-stable-version) --> /mnt/sda7/tmp
-
 cd /mnt/sda7/tmp
 tar -x -f linux*.tar.xz
 tar -x -f busybox*.tar.bz2
 chown -R 0.0 /mnt/sda7
 
-7. install a monolithic kernel (ex. installing linux-5.11.3)
+7. install a monolithic kernel (ex. linux-5.11.10)
 
 cd /mnt/sda7/tmp/linux*/
 make clean
@@ -49,18 +48,18 @@ make headers_install INSTALL_HDR_PATH=/mnt/sda7/usr
 cd /mnt/sda7
 ln -f -s boot/vmlinuz* vmlinuz
 
-8. create initramfs image for the new kernel (ex. for vmlinuz-5.11.3)
+8. create initramfs image for new kernel (ex. vmlinuz-5.11.10)
 
 cd /mnt/sda7/boot
-mkinitramfs -o initramfs-5.11.3 5.11.3 (**ignore all module warnings**)
+mkinitramfs -o initramfs-5.11.10 5.11.10 (**ignore all module warnings**)
 
-9. extract userspace from the new initramfs image
+9. extract userspace from new initramfs image
 
 cd /mnt/sda7
 gunzip -c ./boot/initramfs* > ./tmp/initramfs.tmp
 cpio -i -d < ./tmp/initramfs.tmp
 
-10. cleanup the new root directory
+10. cleanup new root directory
 
 rm /mnt/sda7/init
 rm -f -r /mnt/sda7/conf
@@ -71,7 +70,7 @@ rm -f -r /mnt/sda7/scripts
 cd /mnt/sda7/tmp/busybox*/
 make clean
 make distclean
-make menuconfig (change install destination to /mnt/sda7)
+make menuconfig (**change install destination to /mnt/sda7**)
 make
 make install
 
@@ -91,7 +90,7 @@ done
 cat > /mnt/sda7/etc/os-release << 'done'
 PRETTY_NAME="minimal-linux-new-16"
 NAME="newmin16"
-VERSION="v19"
+VERSION="v20"
 HOME_URL="https://github.com"
 done
 
