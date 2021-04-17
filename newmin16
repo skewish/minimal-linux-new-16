@@ -9,19 +9,19 @@ internet connection
 
 2. open a terminal & become su
 
-3. install compiler for parent system (if not already present)
+3. install a compiler for the parent system (if not already present)
 
 apt install build-essential
 apt install bc bison flex gawk python rsync
 apt install libelf-dev libncurses-dev libssl-dev
 
-4. create & mount a filesystem on build partition (ex. /dev/sda7)
+4. create & mount a filesystem on the build partition (ex. /dev/sda7)
 
 mkdir /mnt/sda7
 mkfs.ext4 /dev/sda7
 mount -t ext4 /dev/sda7 /mnt/sda7
 
-5. add some directories to /mnt/sda7
+5. add some directories to /mnt/sda7 (the new root directory)
 
 cd /mnt/sda7
 mkdir {boot,dev,proc,sys,tmp,usr}
@@ -35,31 +35,31 @@ tar -x -f linux*.tar.xz
 tar -x -f busybox*.tar.bz2
 chown -R 0.0 /mnt/sda7
 
-7. install a monolithic kernel (ex. linux-5.11.10)
+7. install a monolithic kernel on /mnt/sda7/boot (ex. linux-5.11.15)
 
 cd /mnt/sda7/tmp/linux*/
 make clean
 make distclean
 make defconfig
-make menuconfig (disable loadable module support & anything you don't need)
+make menuconfig (disable loadable module support & anything not needed)
 make -j4
 make install INSTALL_PATH=/mnt/sda7/boot
 make headers_install INSTALL_HDR_PATH=/mnt/sda7/usr
 cd /mnt/sda7
 ln -f -s boot/vmlinuz* vmlinuz
 
-8. create initramfs image for new kernel (ex. vmlinuz-5.11.10)
+8. create an initramfs image for the new kernel (ex. vmlinuz-5.11.15)
 
 cd /mnt/sda7/boot
-mkinitramfs -o initramfs-5.11.10 5.11.10 (**ignore all module warnings**)
+mkinitramfs -o initramfs-5.11.15 5.11.15 (**ignore all module warnings**)
 
-9. extract userspace from new initramfs image
+9. extract userspace from the initramfs image
 
 cd /mnt/sda7
 gunzip -c ./boot/initramfs* > ./tmp/initramfs.tmp
 cpio -i -d < ./tmp/initramfs.tmp
 
-10. cleanup new root directory
+10. cleanup the new root directory
 
 rm /mnt/sda7/init
 rm -f -r /mnt/sda7/conf
@@ -70,6 +70,7 @@ rm -f -r /mnt/sda7/scripts
 cd /mnt/sda7/tmp/busybox*/
 make clean
 make distclean
+make defconfig
 make menuconfig (**change install destination to /mnt/sda7**)
 make
 make install
@@ -90,7 +91,7 @@ done
 cat > /mnt/sda7/etc/os-release << 'done'
 PRETTY_NAME="minimal-linux-new-16"
 NAME="newmin16"
-VERSION="v20"
+VERSION="v21"
 HOME_URL="https://github.com"
 done
 
