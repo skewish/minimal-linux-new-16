@@ -2,7 +2,7 @@ minimal-linux-new-16
 
 1. parent system pre-setup (fyi)
 
-64-bit debian (latest-stable-version)
+64-bit debian on /dev/sda (latest-stable-version)
 10 GB build partition (ex. /dev/sda7)
 typical swap partition (ex. /dev/sda2)
 internet connection
@@ -15,13 +15,13 @@ apt install build-essential
 apt install bc bison flex gawk python rsync
 apt install libelf-dev libncurses-dev libssl-dev
 
-4. create & mount a filesystem on the build partition (ex. /dev/sda7)
+4. create & mount a filesystem on the build partition
 
 mkdir /mnt/sda7
 mkfs.ext4 /dev/sda7
 mount -t ext4 /dev/sda7 /mnt/sda7
 
-5. add some directories to /mnt/sda7 (the new root directory)
+5. add directories to /mnt/sda7 (the new root directory)
 
 cd /mnt/sda7
 mkdir {boot,dev,proc,sys,tmp,usr}
@@ -35,29 +35,29 @@ tar -x -f linux*.tar.xz
 tar -x -f busybox*.tar.bz2
 chown -R 0.0 /mnt/sda7
 
-7. install a monolithic kernel on /mnt/sda7/boot (ex. linux-5.11.15)
+7. compile & install a monolithic kernel (ex. linux-5.12.2)
 
 cd /mnt/sda7/tmp/linux*/
 make clean
 make distclean
 make defconfig
-make menuconfig (disable loadable module support & anything not needed)
+make menuconfig (**disable loadable module support**)
 make -j4
 make install INSTALL_PATH=/mnt/sda7/boot
 make headers_install INSTALL_HDR_PATH=/mnt/sda7/usr
 cd /mnt/sda7
 ln -f -s boot/vmlinuz* vmlinuz
 
-8. create an initramfs image for the new kernel (ex. vmlinuz-5.11.15)
+8. create an initramfs image for the new kernel
 
 cd /mnt/sda7/boot
-mkinitramfs -o initramfs-5.11.15 5.11.15 (**ignore all module warnings**)
+mkinitramfs -o initramfs-5.12.2 5.12.2 (**ignore all module warnings**)
 
-9. extract userspace from the initramfs image
+9. extract userspace from the new initramfs image
 
 cd /mnt/sda7
 gunzip -c ./boot/initramfs* > ./tmp/initramfs.tmp
-cpio -i -d < ./tmp/initramfs.tmp
+cpio -i < ./tmp/initramfs.tmp
 
 10. cleanup the new root directory
 
@@ -78,10 +78,9 @@ make install
 12. add /mnt/sda7/etc/fstab
 
 cat > /mnt/sda7/etc/fstab << 'done'
-udev /dev devtmpfs defaults 0 0
 proc /proc proc defaults 0 0
-tmpfs /run tmpfs defaults 0 0
 sysfs /sys sysfs defaults 0 0
+tmpfs /run tmpfs defaults 0 0
 /dev/sda7 / ext4 defaults 0 1
 /dev/sda2 none swap sw 0 0
 done
@@ -91,7 +90,7 @@ done
 cat > /mnt/sda7/etc/os-release << 'done'
 PRETTY_NAME="minimal-linux-new-16"
 NAME="newmin16"
-VERSION="v21"
+VERSION="v22"
 HOME_URL="https://github.com"
 done
 
@@ -100,7 +99,7 @@ done
 mkdir /mnt/sda7/etc/init.d
 cat > /mnt/sda7/etc/init.d/rcS << 'done'
 #!/bin/sh
-mount -w -o remount /dev/sda7 /
+mount -o remount,rw /dev/sda7 /
 rm -f -r /tmp;mkdir -m 1777 /tmp
 rm /.ash_history
 mount -a
@@ -108,7 +107,7 @@ swapon -a
 done
 chmod 0755 /mnt/sda7/etc/init.d/rcS
 
-15. update grub2 (rec. password protect grub menu)
+15. update grub (rec. password protect grub menu)
 
 cd /
 umount /dev/sda7
