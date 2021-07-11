@@ -35,7 +35,7 @@ tar -x -f linux*.tar.xz
 tar -x -f busybox*.tar.bz2
 chown -R 0.0 /mnt/sda7
 
-7. compile & install a monolithic kernel (ex. linux-5.12.8)
+7. compile & install a monolithic kernel (ex. linux-5.13.1)
 
 cd /mnt/sda7/tmp/linux*/
 make distclean
@@ -50,7 +50,7 @@ ln -f -s boot/vmlinuz* vmlinuz
 8. create an initramfs image for the new kernel
 
 cd /mnt/sda7/boot
-mkinitramfs -o initramfs-5.12.8 5.12.8 (**ignore all module warnings**)
+mkinitramfs -o initramfs-5.13.1 5.13.1 (**ignore all module warnings**)
 
 9. extract userspace from the initramfs image
 
